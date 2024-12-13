@@ -124,6 +124,7 @@ def main():
     term_name = st.text_input("Enter the term to search:", "Age-related macular degeneration")
     max_depth = st.slider("Select max depth for traversal:", min_value=1, max_value=5, value=3)
     save_graph = st.checkbox("Save 3D graph as HTML file")
+    download_relationships = st.checkbox("Download relationships as TXT file")
 
     if st.button("Generate Graph"):
         st.write("Fetching data... This might take a few moments.")
@@ -158,7 +159,32 @@ def main():
                 relationships.append(relationship)
             st.text("\n".join(relationships))
 
+            # Automatically save relationships as a TXT file
+            if download_relationships:
+                relationships_txt = "\n".join(relationships)
+                with open("relationships.txt", "w") as txt_file:
+                    txt_file.write(relationships_txt)
+
+            # Generate the 3D graph and save as HTML if selected
             create_3d_graph(graph, save_graph)
+
+            # Provide download buttons for TXT and HTML files
+            if download_relationships:
+                st.download_button(
+                    label="Download Relationships as TXT",
+                    data=open("relationships.txt", "r").read(),
+                    file_name="relationships.txt",
+                    mime="text/plain"
+                )
+
+            if save_graph:
+                with open("3d_graph.html", "r") as html_file:
+                    st.download_button(
+                        label="Download 3D Graph as HTML",
+                        data=html_file.read(),
+                        file_name="3d_graph.html",
+                        mime="text/html"
+                    )
 
 if __name__ == "__main__":
     main()
