@@ -6,6 +6,8 @@ from collections import deque
 from langdetect import detect
 import plotly.graph_objects as go
 import streamlit as st
+import io
+import zipfile
 
 # Fetch API key from environment variables
 API_KEY = os.getenv("API_KEY")
@@ -118,6 +120,16 @@ def create_3d_graph(graph, save_file):
 
     st.plotly_chart(fig, use_container_width=True)
 
+
+def create_zip():
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w") as zip_file:
+        zip_file.writestr("relationships.txt", relationships_txt)
+        with open("3d_graph.html", "r") as html_file:
+            zip_file.writestr("3d_graph.html", html_file.read())
+    zip_buffer.seek(0)
+    return zip_buffer
+
 def main():
     st.title("3D Graph Visualization of UMLS Relationships")
 
@@ -164,22 +176,14 @@ def main():
 
             # Generate the 3D graph and save as HTML
             create_3d_graph(graph, save_file=True)
-
-            # Provide download buttons for TXT and HTML files
+            
+            zip_buffer = create_zip()
             st.download_button(
-                label="Download Relationships as TXT",
-                data=relationships_txt,
-                file_name="relationships.txt",
-                mime="text/plain"
+                label="Download as ZIP",
+                data=zip_buffer,
+                file_name="files.zip",
+                mime="application/zip"
             )
-
-            with open("3d_graph.html", "r") as html_file:
-                st.download_button(
-                    label="Download 3D Graph as HTML",
-                    data=html_file.read(),
-                    file_name="3d_graph.html",
-                    mime="text/html"
-                )
 
 if __name__ == "__main__":
     main()
