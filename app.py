@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 # Fetch API key from environment variables
+API_KEY = os.getenv("API_KEY")
 if not API_KEY:
     st.error("API_KEY environment variable not set. Please configure it and restart the application.")
     st.stop()
