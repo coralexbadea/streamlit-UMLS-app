@@ -2,3 +2,4 @@ langdetect
 networkx
 matplotlib
 streamlit
+plotly

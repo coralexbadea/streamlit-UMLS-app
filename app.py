@@ -8,7 +8,6 @@ import plotly.graph_objects as go
 import streamlit as st
 
 # Fetch API key from environment variables
-API_KEY = os.getenv("API_KEY")
 if not API_KEY:
     st.error("API_KEY environment variable not set. Please configure it and restart the application.")
     st.stop()
@@ -149,6 +148,15 @@ def main():
                 depth += 1
 
             st.write("Graph generation complete.")
+
+            # Display available nodes and their relationships
+            st.subheader("Available Nodes and Their Relationships")
+            relationships = []
+            for u, v, data in graph.edges(data=True):
+                relationship = f"{u} --> {v} (Relation: {data['label']})"
+                relationships.append(relationship)
+            st.text("\n".join(relationships))
+
             create_3d_graph(graph, save_graph)
 
 if __name__ == "__main__":
