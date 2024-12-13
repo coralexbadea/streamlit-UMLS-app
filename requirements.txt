@@ -1,0 +1,4 @@
+langdetect
+networkx
+matplotlib
+streamlit
