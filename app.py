@@ -124,7 +124,8 @@ def create_3d_graph(graph, save_file):
 def create_zip():
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w") as zip_file:
-        zip_file.writestr("relationships.txt", relationships_txt)
+        with open("relationships.txt", "r") as txt_file:
+            zip_file.writestr("relationships.txt", txt_file.read())
         with open("3d_graph.html", "r") as html_file:
             zip_file.writestr("3d_graph.html", html_file.read())
     zip_buffer.seek(0)
