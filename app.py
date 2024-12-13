@@ -50,7 +50,7 @@ def get_relations(depth, name, uri, page_number, graph):
             depth=depth
         )
 
-        if detect(info.get("relatedIdName", "")) == 'en':
+        if detect(info.get("relatedIdName")) == 'en': # only add information in english
             kids.append((info.get("relatedIdName"), info.get("relatedId")))
 
     return kids
