@@ -42,15 +42,15 @@ def get_relations(depth, name, uri, page_number, graph):
     kids = []
 
     for info in json_data.get("result", []):
-        graph.add_edge(
-            name,
-            info.get("relatedIdName"),
-            label=f"{info.get('relationLabel')}({info.get('additionalRelationLabel')})",
-            uri=info.get("relatedId"),
-            depth=depth
-        )
+        if detect(info.get("relatedIdName")) == 'en': # only add information
+            graph.add_edge(
+                name,
+                info.get("relatedIdName"),
+                label=f"{info.get('relationLabel')}({info.get('additionalRelationLabel')})",
+                uri=info.get("relatedId"),
+                depth=depth
+            )
 
-        if detect(info.get("relatedIdName")) == 'en': # only add information in english
             kids.append((info.get("relatedIdName"), info.get("relatedId")))
 
     return kids
